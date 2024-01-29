@@ -192,17 +192,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<p>In this blog, I will use the Palmer Penguins dataset to show how to create interesting data visualization.</p>
+<p>In this blog, I will use the Palmer Penguins dataset to show how to create interesting data visualization. There are many visuals that we can use for the data set like scatterplot, histogram, or boxplot, but for today, we will use scatterplots.</p>
+<section id="prepping-dataframe" class="level1">
+<h1>Prepping Dataframe</h1>
 <p>To access the dataframe, we first have to read in the csv file using pandas. Thus, we need to import the pandas library in order to work with data.</p>
-<div id="978511e2" class="cell" data-execution_count="37">
+<div id="978511e2" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://raw.githubusercontent.com/pic16b-ucla/24W/main/datasets/palmer_penguins.csv"</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>penguins <span class="op">=</span> pd.read_csv(url)     </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Next, we want to visualize the data structure to see what type of information we are working with. We can use the head function of pandas to access the first five entries.</p>
-<div id="0094d694" class="cell" data-execution_count="38">
+<div id="0094d694" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>penguins.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="38">
+<div class="cell-output cell-output-display" data-execution_count="3">
 <div>
 
 
@@ -337,7 +339,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Following standard pandas operations, we want to clean up our data a little bit, removing any “N/A” entries and shortening the names.</p>
-<div id="ee755e69" class="cell" data-execution_count="39">
+<div id="ee755e69" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>penguins <span class="op">=</span> penguins.dropna(subset <span class="op">=</span> [<span class="st">"Body Mass (g)"</span>, <span class="st">"Sex"</span>])  <span class="co"># Removing penguins with NaN entries in Sex or Body Mass</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>penguins[<span class="st">"Species"</span>] <span class="op">=</span> penguins[<span class="st">"Species"</span>].<span class="bu">str</span>.split().<span class="bu">str</span>.get(<span class="dv">0</span>)   <span class="co"># Only getting the first word of the Species entry (i.e. species type)</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>cols <span class="op">=</span> [<span class="st">"Species"</span>,                 <span class="co"># Specifying the columns we want to look further</span></span>
@@ -350,9 +352,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>penguins <span class="op">=</span> penguins[cols]          <span class="co"># Choosing the columns we want our data frame to consist of</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now, let’s take a look at the new simplified data set.</p>
-<div id="82a4d6fc" class="cell" data-execution_count="40">
+<div id="82a4d6fc" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>penguins.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="40">
+<div class="cell-output cell-output-display" data-execution_count="5">
 <div>
 
 
@@ -427,15 +429,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>Note that there were additional column information which we are going to ignore for today.</p>
-<p>Once the data set is cleaned, we can start creating our data visualizations. There are many visuals that we can use for the data set like scatterplot, histogram, or boxplot, but for today, we will use scatterplots. In our examples, we will be using the matplotlib, a common library used for data visualizaiton. So, we need to import the matplotlib library as well.</p>
-<div id="12e4865f" class="cell" data-execution_count="41">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<p>Once the data set is cleaned, we can start creating our data visualizations.</p>
+</section>
+<section id="separating-dataframe" class="level1">
+<h1>Separating Dataframe</h1>
 <p>Because this data set consists of different types of penguin species, we need to figure out how many species types we are dealing with and what their names are so that we know what to call in our code. We can use the value_counts function in the pandas library to do the following:</p>
-<div id="d9d39d06" class="cell" data-execution_count="42">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>penguins[<span class="st">"Species"</span>].value_counts()  <span class="co"># Counting the number of penguins be each Species type</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="42">
+<div id="d9d39d06" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>penguins[<span class="st">"Species"</span>].value_counts()  <span class="co"># Counting the number of penguins be each Species type</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>Species
 Adelie       146
 Gentoo       120
@@ -446,16 +447,16 @@ Name: count, dtype: int64</code></pre>
 <p>From this, we know that the penguins in this data set are classified as one of the three following species type: Adelie, Gentoo, or Chinstrap.</p>
 <p>Now, we can start writing our code to create the scatterplot. First, we need to separate the penguin types and create individual data frames for each of the three species. To do so, we can use boolean indexing. We can use a <code>==</code> statement to return a <code>True</code> or <code>False</code> value indicating whether or not a specific entry is of the indicated penguin species</p>
 <p>For example, to find only the Gentoo penguins, we will say <code>penguins["Species"]=="Gentoo"</code> as our conditional statement for including an into the created data frame. This pattern will help us create our three separate data frames as follows:</p>
-<div id="8b965c44" class="cell" data-execution_count="49">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generating the separate dataframes based on Species</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>Adelie_dataset <span class="op">=</span> penguins[penguins[<span class="st">"Species"</span>] <span class="op">==</span> <span class="st">"Adelie"</span>]</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>Gentoo_dataset <span class="op">=</span> penguins[penguins[<span class="st">"Species"</span>] <span class="op">==</span> <span class="st">"Gentoo"</span>]</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>Chinstrap_dataset <span class="op">=</span> penguins[penguins[<span class="st">"Species"</span>] <span class="op">==</span> <span class="st">"Chinstrap"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="8b965c44" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generating the separate dataframes based on Species</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>Adelie_dataset <span class="op">=</span> penguins[penguins[<span class="st">"Species"</span>] <span class="op">==</span> <span class="st">"Adelie"</span>]</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>Gentoo_dataset <span class="op">=</span> penguins[penguins[<span class="st">"Species"</span>] <span class="op">==</span> <span class="st">"Gentoo"</span>]</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>Chinstrap_dataset <span class="op">=</span> penguins[penguins[<span class="st">"Species"</span>] <span class="op">==</span> <span class="st">"Chinstrap"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s check to see if this successfully separated the penguins by species.</p>
-<div id="5cee05c5" class="cell" data-execution_count="44">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>Adelie_dataset</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="44">
+<div id="5cee05c5" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>Adelie_dataset</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
 <div>
 
 
@@ -590,9 +591,9 @@ Name: count, dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<div id="8a24728f" class="cell" data-execution_count="45">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>Gentoo_dataset</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="45">
+<div id="8a24728f" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>Gentoo_dataset</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
 <div>
 
 
@@ -727,9 +728,9 @@ Name: count, dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<div id="d528e1e6" class="cell" data-execution_count="46">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>Chinstrap_dataset</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="46">
+<div id="d528e1e6" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>Chinstrap_dataset</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
 <div>
 
 
@@ -864,10 +865,19 @@ Name: count, dtype: int64</code></pre>
 </div>
 </div>
 </div>
-<p>Great! Now all we have left is the scatterplot. For matplotlib, the syntax for creating a scatterplot using a dataset is <code>plt.scatter(df[x],df[y])</code> where <code>df</code> is the dataset name and <code>x</code>,<code>y</code> are the independent and dependent columns, respectively, that we want to work with. For our example, we will use Culmen Length and Flipper Length. So using Adelie, we will use the following line of code:</p>
+<p>Great! Now all we have left is the scatterplot.</p>
+</section>
+<section id="creating-visualization" class="level1">
+<h1>Creating Visualization</h1>
+<p>In our examples, we will be using the matplotlib, a common library used for data visualizaiton. So, we need to import the matplotlib library.</p>
+<div id="00e80091" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> matplotlib <span class="im">import</span> pyplot <span class="im">as</span> plt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>For matplotlib, the syntax for creating a scatterplot using a dataset is <code>plt.scatter(df[x],df[y])</code> where <code>df</code> is the dataset name and <code>x</code>,<code>y</code> are the independent and dependent columns, respectively, that we want to work with. For our example, we will use Culmen Length and Flipper Length. So using Adelie, we will use the following line of code:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>plt.scatter(Adelie_dataset[<span class="st">"Culmen Length (mm)"</span>], Adelie_dataset[<span class="st">"Flipper Length (mm)"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Because we are also working with three different data frames, meaning we will have three separate scatterplots on one plot, we can also add a <code>label</code> in our line of code. This way, when we combine all of them into one figure, we can use a legend to help us differentiate each data set. Thus, our code for each species data set will look like this:</p>
-<div id="d8bfa43d" class="cell" data-execution_count="50">
+<div id="d8bfa43d" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generating the scatterplots for each species, labeling each scatterplot by their name so we can differentiate them with a legend</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>plt.scatter(Adelie_dataset[<span class="st">"Culmen Length (mm)"</span>], Adelie_dataset[<span class="st">"Flipper Length (mm)"</span>], label <span class="op">=</span> <span class="st">"Adelie"</span>)</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(Gentoo_dataset[<span class="st">"Culmen Length (mm)"</span>], Gentoo_dataset[<span class="st">"Flipper Length (mm)"</span>], label <span class="op">=</span> <span class="st">"Gentoo"</span>)</span>
@@ -881,7 +891,7 @@ Name: count, dtype: int64</code></pre>
 </div>
 </div>
 <p>Now that we have out scatterplot, we can add features to make the graph more clear. To add the main title, we can use <code>plt.title()</code>. For the the <code>x</code> and <code>y</code> titles, it will be <code>plt.xlabel()</code> and <code>plt.ylabel()</code>, respectively. And finally, to create our legend, we will use <code>plt.legend()</code>. Once we added all this, our figure may look something like this:</p>
-<div id="376572c2" class="cell" data-execution_count="51">
+<div id="376572c2" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generating the scatterplots for each species, labeling each scatterplot by their name so we can differentiate them with a legend</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>plt.scatter(Adelie_dataset[<span class="st">"Culmen Length (mm)"</span>], Adelie_dataset[<span class="st">"Flipper Length (mm)"</span>], label <span class="op">=</span> <span class="st">"Adelie"</span>)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>plt.scatter(Gentoo_dataset[<span class="st">"Culmen Length (mm)"</span>], Gentoo_dataset[<span class="st">"Flipper Length (mm)"</span>], label <span class="op">=</span> <span class="st">"Gentoo"</span>)</span>
@@ -903,6 +913,7 @@ Name: count, dtype: int64</code></pre>
 <p>With this completed scatterplot, we can finally analyze the two data columns. From this, it appears that for all species, there is a moderate to strong positive correlation between Culmen Length and Flipper Length. Also, it appears that these two may be good candidate factors in differentiating the species type as there are three relatively isolated clusters. And with that, we have successfully created our data visualization.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
