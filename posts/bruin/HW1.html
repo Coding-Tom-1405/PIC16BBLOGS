@@ -189,16 +189,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<p>In this blog, I will show how to wortk with databases in order to create interesting and interactive data graphics.</p>
+<p>In this blog, I will show how to wortk with databases in order to create interesting and interactive data graphics. We want to utilize databases when dealing with data sets that are incredibly large to the point of being impratical or inefficient storing the data.</p>
+<section id="creating-database" class="level1">
+<h1>Creating Database</h1>
 <p>Because we are dealing with data, we will import the typical libraries involving data like <code>pandas</code> and <code>numpy</code>. In addition, we will import a library called <code>sqlite3</code> which will let us worth with SQL as well as databases in Python.</p>
 <div id="93f82887" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sqlite3</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Now tht we have imported <code>sqlite3</code>, we will use</p>
+<p>Now that we have imported <code>sqlite3</code>, we will use the <code>connect</code> function to create the database in the curent directory.</p>
+<div id="65c61cd7" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating database in current directory we named data.db</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>conn <span class="op">=</span> sqlite3.<span class="ex">connect</span>(<span class="st">"data.db"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>After we have created our database, we now want to create its tables, which corresponds to the csv files that we are working with. For our example, we will create three tables that will be labeled temperature, stations, countries.</p>
+<p>Next, instead of reading in the data all at once, we</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

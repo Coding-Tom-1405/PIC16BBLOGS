@@ -2,8 +2,9 @@
   {
     "listing": "/index.html",
     "items": [
-      "/posts/bruin/HW1.html",
+      "/posts/HW1/climate_database.html",
       "/posts/bruin/index.html",
+      "/posts/HW1/index.html",
       "/posts/post-with-code/index.html",
       "/posts/welcome/index.html"
     ]
