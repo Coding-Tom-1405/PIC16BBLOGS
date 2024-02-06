@@ -899,7 +899,7 @@ CREATE TABLE "countries" (
 </div>
 <p>From this figure, we can see that because the R-value, representing the average annual change, is mostly around 0, it means that there has been no positive or negative trend in terms of temperature variance. Note that this is for the US only, which means this trend should not be applied to other countries as well.</p>
 <p>For our second one, let’s examine the climate/weather of two geographically similar and close countries. For this, we will need to use histograms to look at their temperature distributions. Unlike the other two, since we want our dataframe to incorporate two different countries, we will have to use a different <code>cmd</code>.</p>
-<div id="b0b300d5" class="cell" data-execution_count="25">
+<div id="b0b300d5" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> temperature_histogram_plot(country1, country2, year_begin, year_end, <span class="op">**</span>kwargs):</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co">    This function generates two histograms of countries' </span></span>
@@ -928,25 +928,20 @@ CREATE TABLE "countries" (
 <span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>    </span>
 <span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.read_sql_query(cmd, conn)</span>
 <span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> df.rename(columns <span class="op">=</span> {<span class="st">"Name"</span> : <span class="st">"Country"</span>})</span>
-<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a><span class="co">#     df1 = query_climate_database(country1, year_begin, year_end, month)</span></span>
-<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a><span class="co">#     df1 = df1.rename(columns = {"Name"  : "Country"}) # Renaming the Name column of countries table to Country</span></span>
-<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a><span class="co">#     df2 = query_climate_database(country1, year_begin, year_end, month)</span></span>
-<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a><span class="co">#     df2 = df2.rename(columns = {"Name"  : "Country"})</span></span>
-<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a><span class="co">#     df = pd.concat([df1, df2], axis=0)</span></span>
-<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> px.histogram(df,</span>
-<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>                  x <span class="op">=</span> <span class="st">"Temp"</span>,</span>
-<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>                  opacity <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a>                  nbins <span class="op">=</span> <span class="dv">30</span>,</span>
-<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a>                  histnorm <span class="op">=</span> <span class="st">"percent"</span>, <span class="co"># Normalizing histograms in case the countries are largely different in counts</span></span>
-<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a>                  barmode <span class="op">=</span> <span class="st">"stack"</span>, </span>
-<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a>                  facet_col <span class="op">=</span> <span class="st">"Country"</span>,</span>
-<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a>                  labels<span class="op">=</span>{</span>
-<span id="cb25-43"><a href="#cb25-43" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"Temp"</span>: <span class="ss">f"Temperature (</span><span class="sc">{</span>degree_sign<span class="sc">}</span><span class="ss">C)"</span>,</span>
-<span id="cb25-44"><a href="#cb25-44" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"count"</span>: <span class="st">"Normalized Counts"</span></span>
-<span id="cb25-45"><a href="#cb25-45" aria-hidden="true" tabindex="-1"></a>                  },</span>
-<span id="cb25-46"><a href="#cb25-46" aria-hidden="true" tabindex="-1"></a>                  title <span class="op">=</span> <span class="ss">f"Normalized Temperature Distributions of </span><span class="sc">{</span>country1<span class="sc">}</span><span class="ss"> and </span><span class="sc">{</span>country2<span class="sc">}</span><span class="ss"> from years </span><span class="sc">{</span>year_begin<span class="sc">}</span><span class="ss"> - </span><span class="sc">{</span>year_end<span class="sc">}</span><span class="ss">"</span>,</span>
-<span id="cb25-47"><a href="#cb25-47" aria-hidden="true" tabindex="-1"></a>                  <span class="op">**</span>kwargs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> px.histogram(df,</span>
+<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>                  x <span class="op">=</span> <span class="st">"Temp"</span>,</span>
+<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>                  opacity <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>                  nbins <span class="op">=</span> <span class="dv">30</span>,</span>
+<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>                  histnorm <span class="op">=</span> <span class="st">"percent"</span>, <span class="co"># Normalizing histograms in case the countries are largely different in counts</span></span>
+<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>                  barmode <span class="op">=</span> <span class="st">"stack"</span>, </span>
+<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>                  facet_col <span class="op">=</span> <span class="st">"Country"</span>,</span>
+<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>                  labels<span class="op">=</span>{</span>
+<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"Temp"</span>: <span class="ss">f"Temperature (</span><span class="sc">{</span>degree_sign<span class="sc">}</span><span class="ss">C)"</span>,</span>
+<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"count"</span>: <span class="st">"Normalized Counts"</span></span>
+<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a>                  },</span>
+<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a>                  title <span class="op">=</span> <span class="ss">f"Normalized Temperature Distributions of </span><span class="sc">{</span>country1<span class="sc">}</span><span class="ss"> and </span><span class="sc">{</span>country2<span class="sc">}</span><span class="ss"> from years </span><span class="sc">{</span>year_begin<span class="sc">}</span><span class="ss"> - </span><span class="sc">{</span>year_end<span class="sc">}</span><span class="ss">"</span>,</span>
+<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a>                  <span class="op">**</span>kwargs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Note that this is creating normalized histogram distibutions to prevent unfair visual comparison. Now we can test our function using two close countries, like the US and Mexico.</p>
 <div id="4476abdf" class="cell" data-execution_count="26">
@@ -958,7 +953,7 @@ CREATE TABLE "countries" (
 </div>
 <p>From this figure, we can see how India has a a larger temperature range, from -8 to 38 degrees Celsius, compared to Pakistan, from 0 to 38 degrees. In addition, it also has a higher peek than Pakistan. However, Pakistan’s peak is father away than India, peaking at 30 to 32 degrees while India peaked at 26-28 degrees. We can also not that both left-skewed. Thus, while there is a similarity between the two countries, there are also major differences in terms of climate. This makes sense since India is a much more geographically large countyry compared to Pakistan, which would mean it should hve more variance in temperature across different stations. In addition, India has more coastal regions and also takes up majority of the Himilayas mountains, resulting in colder temperatures than Pakistan which has less coastal regions and only takes up five percent of the mountains.</p>
 <p>Now that we have created all our figures, let’s make sure to close the database connection.</p>
-<div id="a2f18726" class="cell" data-execution_count="28">
+<div id="000a9bff" class="cell" data-execution_count="29">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>conn.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
