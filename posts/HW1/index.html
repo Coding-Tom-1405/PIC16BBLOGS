@@ -627,13 +627,13 @@ CREATE TABLE "countries" (
 </div>
 </div>
 <p>Now we have our query function. Let’s see if it is outputting our desired data set using a randon test case. For our example, we will to retrieve data from India in the month of January from 1980 to 2020.</p>
-<div id="e2369d9c" class="cell" data-execution_count="14">
+<div id="e2369d9c" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>query_climate_database(db_file <span class="op">=</span> <span class="st">"data.db"</span>,</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                       country <span class="op">=</span> <span class="st">"India"</span>, </span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                       year_begin <span class="op">=</span> <span class="dv">1980</span>, </span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                       year_end <span class="op">=</span> <span class="dv">2020</span>,</span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                       month <span class="op">=</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="14">
+<div class="cell-output cell-output-display" data-execution_count="13">
 <div>
 
 
@@ -712,7 +712,7 @@ CREATE TABLE "countries" (
 <td>...</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">40971</td>
+<td data-quarto-table-cell-role="th">44123</td>
 <td>DARJEELING</td>
 <td>27.050</td>
 <td>88.270</td>
@@ -722,7 +722,7 @@ CREATE TABLE "countries" (
 <td>5.10</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">40972</td>
+<td data-quarto-table-cell-role="th">44124</td>
 <td>DARJEELING</td>
 <td>27.050</td>
 <td>88.270</td>
@@ -732,7 +732,7 @@ CREATE TABLE "countries" (
 <td>6.90</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">40973</td>
+<td data-quarto-table-cell-role="th">44125</td>
 <td>DARJEELING</td>
 <td>27.050</td>
 <td>88.270</td>
@@ -742,7 +742,7 @@ CREATE TABLE "countries" (
 <td>8.10</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">40974</td>
+<td data-quarto-table-cell-role="th">44126</td>
 <td>DARJEELING</td>
 <td>27.050</td>
 <td>88.270</td>
@@ -752,7 +752,7 @@ CREATE TABLE "countries" (
 <td>5.60</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">40975</td>
+<td data-quarto-table-cell-role="th">44127</td>
 <td>DARJEELING</td>
 <td>27.050</td>
 <td>88.270</td>
@@ -764,7 +764,7 @@ CREATE TABLE "countries" (
 </tbody>
 </table>
 
-<p>40976 rows × 7 columns</p>
+<p>44128 rows × 7 columns</p>
 </div>
 </div>
 </div>
@@ -774,13 +774,13 @@ CREATE TABLE "countries" (
 <h1>Writing Geographic Scatter Function</h1>
 <p>With our basic query function down, we will now diverge into different examples of them. The first example we will make is a scatter function which uses data to create scatterplot.</p>
 <p>For this example, we will be using the <code>plotly</code> library which allows us to create interactive data visualization, so we will need to import that.</p>
-<div id="8a232647" class="cell" data-execution_count="15">
+<div id="8a232647" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plotly <span class="im">import</span> express <span class="im">as</span> px</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.io <span class="im">as</span> pio</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>pio.renderers.default<span class="op">=</span><span class="st">"iframe"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>First, we need to create a <code>coeff()</code> function that will perform linear linear regression on the data, using the years as the independent variable and the temperatures as the dependent variable. Because we are dealing with linear regression, we will also need to import it from the <code>sklearn</code> library. Also, in order to read the numbers as months, we will import <code>calendar</code>.</p>
-<div id="d22d2f80" class="cell" data-execution_count="16">
+<div id="d22d2f80" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> calendar</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -792,7 +792,7 @@ CREATE TABLE "countries" (
 <span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> LR.coef_[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>With this function, we can now create a function, which we will call <code>temperature_plot()</code> to create our plots. Because we already have a query function to create our desired dataframe, we are going to call it in our function to make it simpler.</p>
-<div id="28743372" class="cell" data-execution_count="17">
+<div id="28743372" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>degree_sign <span class="op">=</span> <span class="st">u'</span><span class="ch">\N{DEGREE SIGN}</span><span class="st">'</span> <span class="co"># Syntax for the degree symbol</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> temperature_coefficient_plot(country, year_begin, year_end, month, min_obs, <span class="op">**</span>kwargs):</span>
@@ -831,7 +831,7 @@ CREATE TABLE "countries" (
 <span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a>                        title <span class="op">=</span> <span class="ss">f"Estimates of Yearly Increase in </span><span class="sc">{</span>calendar<span class="sc">.</span>month_name[month]<span class="sc">}</span><span class="ss"> for Stations in </span><span class="sc">{</span>country<span class="sc">}</span><span class="ss"> (</span><span class="sc">{</span>year_begin<span class="sc">}</span><span class="ss"> - </span><span class="sc">{</span>year_end<span class="sc">}</span><span class="ss">)"</span>,</span>
 <span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a>                        <span class="op">**</span>kwargs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="aea24f50" class="cell" data-scrolled="true" data-execution_count="18">
+<div id="aea24f50" class="cell" data-scrolled="true" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>color_map <span class="op">=</span> px.colors.diverging.RdGy_r <span class="co"># Selecting colormap</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> temperature_coefficient_plot(<span class="st">"India"</span>, <span class="dv">1980</span>, <span class="dv">2020</span>, <span class="dv">1</span>, </span>
@@ -842,7 +842,7 @@ CREATE TABLE "countries" (
 <span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_18.html" frameborder="0" allowfullscreen=""></iframe>
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_17.html" frameborder="0" allowfullscreen=""></iframe>
 </div>
 </div>
 </section>
@@ -850,7 +850,7 @@ CREATE TABLE "countries" (
 <h1>More Figures / Data Visualisations</h1>
 <p>To end, we will create two more plots. Because our data involves temperature, we will create figures based on climate comparisons.</p>
 <p>Because a common researched aspect of climate change is highly variable weather (meaning it is expected that weather of both extremes become more similar as time progresses), we will first create a plot looking at countries’ variance in temperature over time across its stations. Again, we can call the query function to create our dataframe.</p>
-<div id="e7442874" class="cell" data-execution_count="19">
+<div id="e7442874" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> temperature_variance_plot(country, year_begin, year_end, month, min_obs, <span class="op">**</span>kwargs):</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co">    This function creates a scatterplot figure for data on yearly temperature standard </span></span>
@@ -890,16 +890,16 @@ CREATE TABLE "countries" (
 <span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a>                 hover_data <span class="op">=</span> [<span class="st">"Correlation Coeff R"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>With this function, let’s look into the variance of the US’s temperature in March from 1980 to 2020</p>
-<div id="443deaaa" class="cell" data-execution_count="20">
+<div id="443deaaa" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> temperature_variance_plot(<span class="st">"United States"</span>, <span class="dv">1980</span>, <span class="dv">2020</span>, <span class="dv">3</span>, min_obs <span class="op">=</span> <span class="dv">3</span>)</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_20.html" frameborder="0" allowfullscreen=""></iframe>
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_19.html" frameborder="0" allowfullscreen=""></iframe>
 </div>
 </div>
 <p>From this figure, we can see that because the R-value, representing the average annual change, is mostly around 0, it means that there has been no positive or negative trend in terms of temperature variance. Note that this is for the US only, which means this trend should not be applied to other countries as well.</p>
 <p>For our second one, let’s examine the climate/weather of two geographically similar and close countries. For this, we will need to use histograms to look at their temperature distributions. Unlike the other two, since we want our dataframe to incorporate two different countries, we will have to use a different <code>cmd</code>.</p>
-<div id="b0b300d5" class="cell" data-execution_count="30">
+<div id="b0b300d5" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> temperature_histogram_plot(country1, country2, year_begin, year_end, <span class="op">**</span>kwargs):</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co">    This function generates two histograms of countries' </span></span>
@@ -943,17 +943,17 @@ CREATE TABLE "countries" (
 <span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a>                  title <span class="op">=</span> <span class="ss">f"Normalized Temperature Distributions of </span><span class="sc">{</span>country1<span class="sc">}</span><span class="ss"> and </span><span class="sc">{</span>country2<span class="sc">}</span><span class="ss"> from years </span><span class="sc">{</span>year_begin<span class="sc">}</span><span class="ss"> - </span><span class="sc">{</span>year_end<span class="sc">}</span><span class="ss">"</span>,</span>
 <span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a>                  <span class="op">**</span>kwargs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Note that this is creating normalized histogram distibutions to prevent unfair visual comparison. Now we can test our function using two close countries, like the US and Mexico.</p>
-<div id="4476abdf" class="cell" data-execution_count="26">
+<p>Note that this is creating normalized histogram distibutions to prevent unfair visual comparison. Now we can test our function using two close countries, like India and Pakistan.</p>
+<div id="4476abdf" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> temperature_histogram_plot(<span class="st">"India"</span>, <span class="st">"Pakistan"</span>, <span class="dv">1980</span>, <span class="dv">2020</span>)</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_26.html" frameborder="0" allowfullscreen=""></iframe>
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_21.html" frameborder="0" allowfullscreen=""></iframe>
 </div>
 </div>
 <p>From this figure, we can see how India has a a larger temperature range, from -8 to 38 degrees Celsius, compared to Pakistan, from 0 to 38 degrees. In addition, it also has a higher peek than Pakistan. However, Pakistan’s peak is father away than India, peaking at 30 to 32 degrees while India peaked at 26-28 degrees. We can also not that both left-skewed. Thus, while there is a similarity between the two countries, there are also major differences in terms of climate. This makes sense since India is a much more geographically large countyry compared to Pakistan, which would mean it should hve more variance in temperature across different stations. In addition, India has more coastal regions and also takes up majority of the Himilayas mountains, resulting in colder temperatures than Pakistan which has less coastal regions and only takes up five percent of the mountains.</p>
 <p>Now that we have created all our figures, let’s make sure to close the database connection.</p>
-<div id="000a9bff" class="cell" data-execution_count="29">
+<div id="f4c32c45" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>conn.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
