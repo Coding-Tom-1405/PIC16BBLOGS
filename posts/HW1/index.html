@@ -712,7 +712,7 @@ CREATE TABLE "countries" (
 <td>...</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">44123</td>
+<td data-quarto-table-cell-role="th">47275</td>
 <td>DARJEELING</td>
 <td>27.050</td>
 <td>88.270</td>
@@ -722,7 +722,7 @@ CREATE TABLE "countries" (
 <td>5.10</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">44124</td>
+<td data-quarto-table-cell-role="th">47276</td>
 <td>DARJEELING</td>
 <td>27.050</td>
 <td>88.270</td>
@@ -732,7 +732,7 @@ CREATE TABLE "countries" (
 <td>6.90</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">44125</td>
+<td data-quarto-table-cell-role="th">47277</td>
 <td>DARJEELING</td>
 <td>27.050</td>
 <td>88.270</td>
@@ -742,7 +742,7 @@ CREATE TABLE "countries" (
 <td>8.10</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">44126</td>
+<td data-quarto-table-cell-role="th">47278</td>
 <td>DARJEELING</td>
 <td>27.050</td>
 <td>88.270</td>
@@ -752,7 +752,7 @@ CREATE TABLE "countries" (
 <td>5.60</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">44127</td>
+<td data-quarto-table-cell-role="th">47279</td>
 <td>DARJEELING</td>
 <td>27.050</td>
 <td>88.270</td>
@@ -764,7 +764,7 @@ CREATE TABLE "countries" (
 </tbody>
 </table>
 
-<p>44128 rows × 7 columns</p>
+<p>47280 rows × 7 columns</p>
 </div>
 </div>
 </div>
@@ -845,54 +845,69 @@ CREATE TABLE "countries" (
 <iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_17.html" frameborder="0" allowfullscreen=""></iframe>
 </div>
 </div>
+<p>Let’s also see how the United States looks</p>
+<div id="b1359fdd" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>color_map <span class="op">=</span> px.colors.diverging.RdGy_r <span class="co"># Selecting colormap</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> temperature_coefficient_plot(<span class="st">"United States"</span>, <span class="dv">1980</span>, <span class="dv">2020</span>, <span class="dv">1</span>, </span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>                                   min_obs <span class="op">=</span> <span class="dv">10</span>,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>                                   zoom <span class="op">=</span> <span class="dv">2</span>,</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>                                   mapbox_style<span class="op">=</span><span class="st">"carto-positron"</span>,</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>                                   color_continuous_scale<span class="op">=</span>color_map)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_23.html" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
 </section>
 <section id="more-figures-data-visualisations" class="level1">
 <h1>More Figures / Data Visualisations</h1>
 <p>To end, we will create two more plots. Because our data involves temperature, we will create figures based on climate comparisons.</p>
 <p>Because a common researched aspect of climate change is highly variable weather (meaning it is expected that weather of both extremes become more similar as time progresses), we will first create a plot looking at countries’ variance in temperature over time across its stations. Again, we can call the query function to create our dataframe.</p>
 <div id="e7442874" class="cell" data-execution_count="18">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> temperature_variance_plot(country, year_begin, year_end, month, min_obs, <span class="op">**</span>kwargs):</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co">    This function creates a scatterplot figure for data on yearly temperature standard </span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co">    deviation change for all the stations of a country specified by the user.</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters:</span></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="co">    country: string representing the country name that is returned</span></span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="co">    year_begin: integer representing the earliest year the output includes</span></span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="co">    year_end: integeger representing the latest year the output includes</span></span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="co">    month: integer representing the month of the year that is returned</span></span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a><span class="co">    min_occ: integer representing the minimum required number of years of data for any given station</span></span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
-<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="co">    Return:</span></span>
-<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
-<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a><span class="co">    A plotly geographic scatterplot involving the annal tempearture standard deviation change</span></span>
-<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a><span class="co">    given a specified country, year range, and month of the year.</span></span>
-<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> query_climate_database(<span class="st">"data.db"</span>, country, year_begin, year_end, month) <span class="co"># Creating our desired dataframe to work on</span></span>
-<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"Station_Counts"</span>] <span class="op">=</span> df.groupby(<span class="st">"NAME"</span>)[<span class="st">'NAME'</span>].transform(<span class="st">'count'</span>) <span class="co"># Creating new column to track the number of occurance of a given station</span></span>
-<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> df[df[<span class="st">"Station_Counts"</span>] <span class="op">&gt;=</span> min_obs] <span class="co"># Creating dataframe of data satisfying minimum number of station appearance</span></span>
-<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>    SD <span class="op">=</span> df.groupby([<span class="st">"NAME"</span>,<span class="st">"Year"</span>])[<span class="st">"Temp"</span>].std() <span class="co"># Calculating annual standard deviation</span></span>
-<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>    SD <span class="op">=</span> SD.reset_index() <span class="co">#Reformatting data frame</span></span>
-<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>    coeff <span class="op">=</span> df.groupby([<span class="st">"NAME"</span>]).<span class="bu">apply</span>(coef)  <span class="co"># Calculating annual change in standard deviation</span></span>
-<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>    coeff <span class="op">=</span> coeff.reset_index() <span class="co"># Reformatting dataframe</span></span>
-<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>    coeff <span class="op">=</span> coeff.rename(columns <span class="op">=</span> {<span class="dv">0</span> : <span class="st">"Correlation Coeff R"</span>}) <span class="co"># Renaming column</span></span>
-<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> px.scatter(data_frame <span class="op">=</span> coeff,   </span>
-<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a>                 y <span class="op">=</span> <span class="st">"Correlation Coeff R"</span>, </span>
-<span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a>                 title <span class="op">=</span> <span class="ss">f"Annual Standard Deviation Changes of Stations in </span><span class="sc">{</span>country<span class="sc">}</span><span class="ss">(</span><span class="sc">{</span>year_begin<span class="sc">}</span><span class="ss"> - </span><span class="sc">{</span>year_end<span class="sc">}</span><span class="ss">)"</span>,</span>
-<span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a>                 hover_name <span class="op">=</span> <span class="st">"NAME"</span>,</span>
-<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a>                 hover_data <span class="op">=</span> [<span class="st">"Correlation Coeff R"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> temperature_variance_plot(country, year_begin, year_end, month, min_obs, <span class="op">**</span>kwargs):</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co">    This function creates a scatterplot figure for data on yearly temperature standard </span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co">    deviation change for all the stations of a country specified by the user.</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters:</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="co">    country: string representing the country name that is returned</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="co">    year_begin: integer representing the earliest year the output includes</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="co">    year_end: integeger representing the latest year the output includes</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="co">    month: integer representing the month of the year that is returned</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="co">    min_occ: integer representing the minimum required number of years of data for any given station</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="co">    Return:</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a><span class="co">    A plotly geographic scatterplot involving the annal tempearture standard deviation change</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="co">    given a specified country, year range, and month of the year.</span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> query_climate_database(<span class="st">"data.db"</span>, country, year_begin, year_end, month) <span class="co"># Creating our desired dataframe to work on</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">"Station_Counts"</span>] <span class="op">=</span> df.groupby(<span class="st">"NAME"</span>)[<span class="st">'NAME'</span>].transform(<span class="st">'count'</span>) <span class="co"># Creating new column to track the number of occurance of a given station</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> df[df[<span class="st">"Station_Counts"</span>] <span class="op">&gt;=</span> min_obs] <span class="co"># Creating dataframe of data satisfying minimum number of station appearance</span></span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>    SD <span class="op">=</span> df.groupby([<span class="st">"NAME"</span>,<span class="st">"Year"</span>])[<span class="st">"Temp"</span>].std() <span class="co"># Calculating annual standard deviation</span></span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>    SD <span class="op">=</span> SD.reset_index() <span class="co">#Reformatting data frame</span></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>    coeff <span class="op">=</span> df.groupby([<span class="st">"NAME"</span>]).<span class="bu">apply</span>(coef)  <span class="co"># Calculating annual change in standard deviation</span></span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>    coeff <span class="op">=</span> coeff.reset_index() <span class="co"># Reformatting dataframe</span></span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>    coeff <span class="op">=</span> coeff.rename(columns <span class="op">=</span> {<span class="dv">0</span> : <span class="st">"Correlation Coeff R"</span>}) <span class="co"># Renaming column</span></span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> px.scatter(data_frame <span class="op">=</span> coeff,   </span>
+<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a>                 y <span class="op">=</span> <span class="st">"Correlation Coeff R"</span>, </span>
+<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a>                 title <span class="op">=</span> <span class="ss">f"Annual Standard Deviation Changes of Stations in </span><span class="sc">{</span>country<span class="sc">}</span><span class="ss">(</span><span class="sc">{</span>year_begin<span class="sc">}</span><span class="ss"> - </span><span class="sc">{</span>year_end<span class="sc">}</span><span class="ss">)"</span>,</span>
+<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a>                 hover_name <span class="op">=</span> <span class="st">"NAME"</span>,</span>
+<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a>                 hover_data <span class="op">=</span> [<span class="st">"Correlation Coeff R"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>With this function, let’s look into the variance of the US’s temperature in March from 1980 to 2020</p>
 <div id="443deaaa" class="cell" data-execution_count="19">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> temperature_variance_plot(<span class="st">"United States"</span>, <span class="dv">1980</span>, <span class="dv">2020</span>, <span class="dv">3</span>, min_obs <span class="op">=</span> <span class="dv">3</span>)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> temperature_variance_plot(<span class="st">"United States"</span>, <span class="dv">1980</span>, <span class="dv">2020</span>, <span class="dv">3</span>, min_obs <span class="op">=</span> <span class="dv">3</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_19.html" frameborder="0" allowfullscreen=""></iframe>
 </div>
@@ -900,53 +915,53 @@ CREATE TABLE "countries" (
 <p>From this figure, we can see that because the R-value, representing the average annual change, is mostly around 0, it means that there has been no positive or negative trend in terms of temperature variance. Note that this is for the US only, which means this trend should not be applied to other countries as well.</p>
 <p>For our second one, let’s examine the climate/weather of two geographically similar and close countries. For this, we will need to use histograms to look at their temperature distributions. Unlike the other two, since we want our dataframe to incorporate two different countries, we will have to use a different <code>cmd</code>.</p>
 <div id="b0b300d5" class="cell" data-execution_count="20">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> temperature_histogram_plot(country1, country2, year_begin, year_end, <span class="op">**</span>kwargs):</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co">    This function generates two histograms of countries' </span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="co">    temperature distribution specified year range</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters:</span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a><span class="co">    country1: string giving the name of the first country </span></span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a><span class="co">    country2: string giving the name of the second country</span></span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co">    year_begin: integer representing the earliest year the output includes</span></span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="co">    year_end: integer representing the latest year the output includes</span></span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a><span class="co">    Return:</span></span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
-<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a><span class="co">    A plotly normalized histograms</span></span>
-<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>    cmd <span class="op">=</span> <span class="op">\</span></span>
-<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"""</span></span>
-<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a><span class="ss">    SELECT S.name, S.latitude, S.longitude, C.name, T.year, T.month, T.temp</span></span>
-<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a><span class="ss">    FROM temperatures T</span></span>
-<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a><span class="ss">    LEFT JOIN stations S ON T.id = S.id</span></span>
-<span id="cb25-23"><a href="#cb25-23" aria-hidden="true" tabindex="-1"></a><span class="ss">    LEFT JOIN countries C ON S.code = C."FIPS 10-4"</span></span>
-<span id="cb25-24"><a href="#cb25-24" aria-hidden="true" tabindex="-1"></a><span class="ss">    WHERE C.name = "</span><span class="sc">{</span>country1<span class="sc">}</span><span class="ss">" OR C.name = "</span><span class="sc">{</span>country2<span class="sc">}</span><span class="ss">" AND T.year BETWEEN </span><span class="sc">{</span>year_begin<span class="sc">}</span><span class="ss"> AND </span><span class="sc">{</span>year_end<span class="sc">}</span></span>
-<span id="cb25-25"><a href="#cb25-25" aria-hidden="true" tabindex="-1"></a><span class="ss">    """</span></span>
-<span id="cb25-26"><a href="#cb25-26" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb25-27"><a href="#cb25-27" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.read_sql_query(cmd, conn)</span>
-<span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> df.rename(columns <span class="op">=</span> {<span class="st">"Name"</span> : <span class="st">"Country"</span>})</span>
-<span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb25-30"><a href="#cb25-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> px.histogram(df,</span>
-<span id="cb25-31"><a href="#cb25-31" aria-hidden="true" tabindex="-1"></a>                  x <span class="op">=</span> <span class="st">"Temp"</span>,</span>
-<span id="cb25-32"><a href="#cb25-32" aria-hidden="true" tabindex="-1"></a>                  opacity <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span id="cb25-33"><a href="#cb25-33" aria-hidden="true" tabindex="-1"></a>                  nbins <span class="op">=</span> <span class="dv">30</span>,</span>
-<span id="cb25-34"><a href="#cb25-34" aria-hidden="true" tabindex="-1"></a>                  histnorm <span class="op">=</span> <span class="st">"percent"</span>, <span class="co"># Normalizing histograms in case the countries are largely different in counts</span></span>
-<span id="cb25-35"><a href="#cb25-35" aria-hidden="true" tabindex="-1"></a>                  barmode <span class="op">=</span> <span class="st">"stack"</span>, </span>
-<span id="cb25-36"><a href="#cb25-36" aria-hidden="true" tabindex="-1"></a>                  facet_col <span class="op">=</span> <span class="st">"Country"</span>,</span>
-<span id="cb25-37"><a href="#cb25-37" aria-hidden="true" tabindex="-1"></a>                  labels<span class="op">=</span>{</span>
-<span id="cb25-38"><a href="#cb25-38" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"Temp"</span>: <span class="ss">f"Temperature (</span><span class="sc">{</span>degree_sign<span class="sc">}</span><span class="ss">C)"</span>,</span>
-<span id="cb25-39"><a href="#cb25-39" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"count"</span>: <span class="st">"Normalized Counts"</span></span>
-<span id="cb25-40"><a href="#cb25-40" aria-hidden="true" tabindex="-1"></a>                  },</span>
-<span id="cb25-41"><a href="#cb25-41" aria-hidden="true" tabindex="-1"></a>                  title <span class="op">=</span> <span class="ss">f"Normalized Temperature Distributions of </span><span class="sc">{</span>country1<span class="sc">}</span><span class="ss"> and </span><span class="sc">{</span>country2<span class="sc">}</span><span class="ss"> from years </span><span class="sc">{</span>year_begin<span class="sc">}</span><span class="ss"> - </span><span class="sc">{</span>year_end<span class="sc">}</span><span class="ss">"</span>,</span>
-<span id="cb25-42"><a href="#cb25-42" aria-hidden="true" tabindex="-1"></a>                  <span class="op">**</span>kwargs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> temperature_histogram_plot(country1, country2, year_begin, year_end, <span class="op">**</span>kwargs):</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co">    This function generates two histograms of countries' </span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co">    temperature distribution specified year range</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters:</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="co">    country1: string giving the name of the first country </span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="co">    country2: string giving the name of the second country</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="co">    year_begin: integer representing the earliest year the output includes</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="co">    year_end: integer representing the latest year the output includes</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a><span class="co">    Return:</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a><span class="co">    A plotly normalized histograms</span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>    cmd <span class="op">=</span> <span class="op">\</span></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>    <span class="ss">f"""</span></span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a><span class="ss">    SELECT S.name, S.latitude, S.longitude, C.name, T.year, T.month, T.temp</span></span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a><span class="ss">    FROM temperatures T</span></span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a><span class="ss">    LEFT JOIN stations S ON T.id = S.id</span></span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a><span class="ss">    LEFT JOIN countries C ON S.code = C."FIPS 10-4"</span></span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a><span class="ss">    WHERE C.name = "</span><span class="sc">{</span>country1<span class="sc">}</span><span class="ss">" OR C.name = "</span><span class="sc">{</span>country2<span class="sc">}</span><span class="ss">" AND T.year BETWEEN </span><span class="sc">{</span>year_begin<span class="sc">}</span><span class="ss"> AND </span><span class="sc">{</span>year_end<span class="sc">}</span></span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a><span class="ss">    """</span></span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> pd.read_sql_query(cmd, conn)</span>
+<span id="cb26-28"><a href="#cb26-28" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> df.rename(columns <span class="op">=</span> {<span class="st">"Name"</span> : <span class="st">"Country"</span>})</span>
+<span id="cb26-29"><a href="#cb26-29" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb26-30"><a href="#cb26-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> px.histogram(df,</span>
+<span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a>                  x <span class="op">=</span> <span class="st">"Temp"</span>,</span>
+<span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a>                  opacity <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span id="cb26-33"><a href="#cb26-33" aria-hidden="true" tabindex="-1"></a>                  nbins <span class="op">=</span> <span class="dv">30</span>,</span>
+<span id="cb26-34"><a href="#cb26-34" aria-hidden="true" tabindex="-1"></a>                  histnorm <span class="op">=</span> <span class="st">"percent"</span>, <span class="co"># Normalizing histograms in case the countries are largely different in counts</span></span>
+<span id="cb26-35"><a href="#cb26-35" aria-hidden="true" tabindex="-1"></a>                  barmode <span class="op">=</span> <span class="st">"stack"</span>, </span>
+<span id="cb26-36"><a href="#cb26-36" aria-hidden="true" tabindex="-1"></a>                  facet_col <span class="op">=</span> <span class="st">"Country"</span>,</span>
+<span id="cb26-37"><a href="#cb26-37" aria-hidden="true" tabindex="-1"></a>                  labels<span class="op">=</span>{</span>
+<span id="cb26-38"><a href="#cb26-38" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"Temp"</span>: <span class="ss">f"Temperature (</span><span class="sc">{</span>degree_sign<span class="sc">}</span><span class="ss">C)"</span>,</span>
+<span id="cb26-39"><a href="#cb26-39" aria-hidden="true" tabindex="-1"></a>                     <span class="st">"count"</span>: <span class="st">"Normalized Counts"</span></span>
+<span id="cb26-40"><a href="#cb26-40" aria-hidden="true" tabindex="-1"></a>                  },</span>
+<span id="cb26-41"><a href="#cb26-41" aria-hidden="true" tabindex="-1"></a>                  title <span class="op">=</span> <span class="ss">f"Normalized Temperature Distributions of </span><span class="sc">{</span>country1<span class="sc">}</span><span class="ss"> and </span><span class="sc">{</span>country2<span class="sc">}</span><span class="ss"> from years </span><span class="sc">{</span>year_begin<span class="sc">}</span><span class="ss"> - </span><span class="sc">{</span>year_end<span class="sc">}</span><span class="ss">"</span>,</span>
+<span id="cb26-42"><a href="#cb26-42" aria-hidden="true" tabindex="-1"></a>                  <span class="op">**</span>kwargs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Note that this is creating normalized histogram distibutions to prevent unfair visual comparison. Now we can test our function using two close countries, like India and Pakistan.</p>
 <div id="4476abdf" class="cell" data-execution_count="21">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> temperature_histogram_plot(<span class="st">"India"</span>, <span class="st">"Pakistan"</span>, <span class="dv">1980</span>, <span class="dv">2020</span>)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> temperature_histogram_plot(<span class="st">"India"</span>, <span class="st">"Pakistan"</span>, <span class="dv">1980</span>, <span class="dv">2020</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <iframe scrolling="no" width="100%" height="545px" src="iframe_figures/figure_21.html" frameborder="0" allowfullscreen=""></iframe>
 </div>
@@ -954,7 +969,7 @@ CREATE TABLE "countries" (
 <p>From this figure, we can see how India has a a larger temperature range, from -8 to 38 degrees Celsius, compared to Pakistan, from 0 to 38 degrees. In addition, it also has a higher peek than Pakistan. However, Pakistan’s peak is father away than India, peaking at 30 to 32 degrees while India peaked at 26-28 degrees. We can also not that both left-skewed. Thus, while there is a similarity between the two countries, there are also major differences in terms of climate. This makes sense since India is a much more geographically large countyry compared to Pakistan, which would mean it should hve more variance in temperature across different stations. In addition, India has more coastal regions and also takes up majority of the Himilayas mountains, resulting in colder temperatures than Pakistan which has less coastal regions and only takes up five percent of the mountains.</p>
 <p>Now that we have created all our figures, let’s make sure to close the database connection.</p>
 <div id="f4c32c45" class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>conn.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>conn.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
