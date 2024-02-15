@@ -59,7 +59,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="../../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
@@ -102,6 +102,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
 
 <link rel="stylesheet" href="../../styles.css">
@@ -207,51 +210,51 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Implementing Scraping Methods</h1>
 <p>Now that we have our scrapy project, we want to create a <code>tmdb_spider.py</code> file in the spiders folder.</p>
 <p>We first start by importing <code>scrapy</code>, which is the webscraping library which will allow us to do all of this.</p>
-<div id="8f5b2046" class="cell" data-execution_count="1">
+<div id="8f5b2046" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scrapy</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Next, we need to create the spider class <code>TmbdSpider</code> which contains its name (tmbd_spider) that we will need to perform the webscraping along with the url for the movie from the website we are working with and its three parse methods. For this example, we will use The Dark Knight with the data from The Movie Dtabase. So, our code will look something like this:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> TmdbSpider(scrapy.Spider):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    name <span class="op">=</span> <span class="st">'tmdb_spider'</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    start_urls <span class="op">=</span> [<span class="st">'https://www.themoviedb.org/movie/155-the-dark-knight'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, subdir <span class="op">=</span> <span class="va">None</span>, <span class="op">*</span>args, <span class="op">**</span>kwargs):</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.start_urls <span class="op">=</span> [<span class="ss">f"https://www.themoviedb.org/movie/</span><span class="sc">{</span>subdir<span class="sc">}</span><span class="ss">/"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>And for the three parsing methods:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> parse(<span class="va">self</span>, response):</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">    This function starts with the start_url which is a movie page on the website,</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">    and proceeds by sending a request to the cast page of the movie from the start_url.</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">    This has no outputs but sets up the request to be used in the parse_full_credits function.</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    page <span class="op">=</span> response.url <span class="op">+</span> <span class="st">"/cast"</span> <span class="co"># Adding on /cast to get the cast page of movie's url</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">yield</span> scrapy.Request(page, callback <span class="op">=</span> <span class="va">self</span>.parse_full_credits)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>      <span class="co">"""</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">      This method starts with the start_url which is a movie page on the website,</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">      and proceeds by sending a request to the cast page of the movie from the start_url.</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">      This has no outputs but sets up the request to be used in the parse_full_credits method.</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">      """</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        page <span class="op">=</span> response.url <span class="op">+</span> <span class="st">"/cast"</span> <span class="co"># Adding on /cast to get the cast page of movie's url</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">yield</span> scrapy.Request(page, callback <span class="op">=</span> <span class="va">self</span>.parse_full_credits)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The parse method starts with the start_url and then sends a request for the movie’s cast page from the start_url, which will be used in the next defined method, parse_full_credits</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> parse_full_credits(<span class="va">self</span>, response):</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">    This function starts with the cast page of a movie given through the start_url </span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">    from parse function. It then iterates through all the actors's, actresses's links </span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">    on this page and sends a request for each actor's, actress's page. This</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">    produces no outputs but sets up the requests to be used in the parse_actor_page function.</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> entry <span class="kw">in</span> response.css(<span class="st">"ol"</span>)[<span class="dv">0</span>].css(<span class="st">"li):</span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="er">        actor_tag = entry.css</span>(<span class="st">"a::attr(href)"</span>).get() <span class="co"># Gets unique tag for each actor, actress</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        actor_link <span class="op">=</span> <span class="st">"https://www.themoviedb.org"</span> <span class="op">+</span> actor_tag <span class="co"># Adding on tag to main website </span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>                                                              <span class="co"># address to get the link to</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>                                                              <span class="co"># each actor's, actress's page  </span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">yield</span> scrapy.Request(actor_link, callback <span class="op">=</span> <span class="va">self</span>.parse_actor_page)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>      <span class="co">"""</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">      This method starts with the cast page of a movie given through the start_url </span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">      from parse function. It then iterates through all the actors's, actresses's links </span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">      on this page and sends a request for each actor's, actress's page. This</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">      produces no outputs but sets up the requests to be used in the parse_actor_page method.</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">      """</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> entry <span class="kw">in</span> response.css(<span class="st">"ol"</span>)[<span class="dv">0</span>].css(<span class="st">"li"</span>):</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>            actor_tag <span class="op">=</span> entry.css(<span class="st">"a::attr(href)"</span>).get() <span class="co"># Gets unique tag for each actor, actress</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>            actor_link <span class="op">=</span> <span class="st">"https://www.themoviedb.org"</span> <span class="op">+</span> actor_tag <span class="co"># Adding on tag to main website </span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>                                                                  <span class="co"># address to get the link to</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>                                                                  <span class="co"># each actor's, actress's page  </span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>            <span class="cf">yield</span> scrapy.Request(actor_link, callback <span class="op">=</span> <span class="va">self</span>.parse_actor_page)</span>
 <span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>                                           </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Similar to the last method, this method starts with the cast page of the desired movie and then iterates through all the actor’s, actress’s links on this page and sends a request for each actor’s actress’s page, which will be used in the last defined method, parse_actor_page.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> parse_actor_page(<span class="va">self</span>, response):</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>        <span class="co">"""</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">        This function starts with the actor/actress's page given by the </span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">        This method starts with the actor/actress's page given by the </span></span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">        parse_full_credits function. It then iterates through all the movies that the </span></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">        actor/actress has made an appearance. For each movie, the output will be</span></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">        a dictionary where the key is thename of the actor, actress, and the value</span></span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">        is the name of the movie.</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">        """</span>      </span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    actor_name <span class="op">=</span> response.css(<span class="st">"h2"</span>).css(<span class="st">"::text"</span>).get() <span class="co"># Gets the name of actor, actress </span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> entry <span class="kw">in</span> response.css(<span class="st">"div.credits_list bdi::text"</span>):</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>        movie_or_TV_name <span class="op">=</span> entry.get() <span class="co"># Iterates through each movie appearance</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">yield</span> {<span class="st">"actor"</span> : actor_name, <span class="st">"movie_or_TV_name"</span> : movie_or_TV_name} <span class="co"># Returns dictionary</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">        """</span> </span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>        actor_name <span class="op">=</span> response.css(<span class="st">"h2"</span>).css(<span class="st">"::text"</span>).get() <span class="co"># Gets the name of actor,actress </span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> entry <span class="kw">in</span> response.css(<span class="st">"div.credits_list bdi::text"</span>):</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>            movie_or_TV_name <span class="op">=</span> entry.get() <span class="co"># Iterates through each movie appearance</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">yield</span> {<span class="st">"actor"</span> : actor_name, <span class="st">"movie_or_TV_name"</span> : movie_or_TV_name} <span class="co"># Returns dictionary</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>This method starts with the page of a certain actor, actress and iterates through all movies the this actor, actress has made an appearance and for each one movie we will return a dictionary with the their name and the movie’s name.</p>
 <p>Great, now we can use our defined spider! So in terminal, navigate to the TMDB_scraper folder by running</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>scrapy crawl tmdb_spider <span class="op">-</span>o results.csv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -261,13 +264,320 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Creating Movie Recommender</h1>
 <p>Now that we have our completed data set, we will want to create an algorith to help us with movie recommendations.</p>
 <p>We first start off by reading in our data, so we need to import the <code>pandas</code> and <code>numpy</code> libraries.</p>
-<div id="b94a16a8" class="cell" data-execution_count="2">
+<div id="b94a16a8" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> pd.read_csv(<span class="st">"results.csv"</span>)</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>FileNotFoundError: [Errno 2] No such file or directory: 'results.csv'</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="7">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">actor</th>
+<th data-quarto-table-cell-role="th">movie_or_TV_name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>Heath Ledger</td>
+<td>Heath Ledger: A Tragic Tale</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Heath Ledger</td>
+<td>Joker: Put on a Happy Face</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Heath Ledger</td>
+<td>I Am Heath Ledger</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Heath Ledger</td>
+<td>The Fire Rises: The Creation and Impact of The...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Heath Ledger</td>
+<td>Too Young to Die</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4144</td>
+<td>Michael Caine</td>
+<td>The Double</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">4145</td>
+<td>Michael Caine</td>
+<td>Blue Ice</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4146</td>
+<td>Michael Caine</td>
+<td>The Fourth Protocol</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">4147</td>
+<td>Michael Caine</td>
+<td>Pulp</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4148</td>
+<td>Michael Caine</td>
+<td>Get Carter</td>
+</tr>
+</tbody>
+</table>
+
+<p>4149 rows × 2 columns</p>
+</div>
+</div>
+</div>
+<p>As verification, we want to make sure that the number of actors and actresses listed in our data equals the size of the movie cast. So, we would run the code below:</p>
+<div id="6678f565" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(results[<span class="st">"actor"</span>].unique())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>136</code></pre>
+</div>
+</div>
+<p>Now, we want to create a 2-dimensional list with one column consists of all the movie names the actors or actresses have appeared in while the other column consists of the number of actor and actresses from The Dark Knight that was also in a certain movie.</p>
+<div id="463d9f17" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>movies_or_TV_shows <span class="op">=</span> results[<span class="st">"movie_or_TV_name"</span>].unique() <span class="co"># Creating df containing all </span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                                                          <span class="co"># movie names with 0 repeats</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>rows, cols <span class="op">=</span> (<span class="bu">len</span>(movies_or_TV_shows), <span class="dv">2</span>) </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>rec_list <span class="op">=</span> [[<span class="dv">0</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(cols)] <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(rows)] <span class="co"># Creating 2D lists, each unique movie </span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                                                           <span class="co"># gets in own row</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>index <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> movie_or_TV_show <span class="kw">in</span> movies_or_TV_shows:</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co">    Iterating through each movie, creating a dataframe of all actors and actreses from </span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co">    The Dark Knight movie that also appeared in the specific movie, and then counting</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co">    the number of actors and actresses</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>    panda <span class="op">=</span> results[results[<span class="st">"movie_or_TV_name"</span>] <span class="op">==</span> movie_or_TV_show]</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    num_shared_actors <span class="op">=</span> <span class="bu">len</span>(panda)</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    rec_list[index][<span class="dv">0</span>] <span class="op">=</span> movie_or_TV_show   <span class="co"># Movie name list</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>    rec_list[index][<span class="dv">1</span>] <span class="op">=</span> num_shared_actors  <span class="co"># Counting list</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>    index <span class="op">+=</span> <span class="dv">1</span> <span class="co"># Updating list</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>With this list, we now need to sort it, which we can do using the <code>sorted()</code> function and <code>lambda</code> functions. Because we want the top movie recommendations first, we will use the <code>reverse=True</code> statement. Lastly, we want to convert this to a pandas dataframe to use later.</p>
+<div id="3c601414" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>rec_list_sorted <span class="op">=</span> <span class="bu">sorted</span>(rec_list,key<span class="op">=</span><span class="kw">lambda</span> l:l[<span class="dv">1</span>], reverse<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>rec_list_sorted <span class="op">=</span> pd.DataFrame(rec_list_sorted)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>rec_list_panda <span class="op">=</span> rec_list_sorted.rename(columns <span class="op">=</span> {<span class="dv">0</span>: <span class="st">"Movie"</span>, </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>                                                   <span class="dv">1</span>: <span class="st">"No. Actors Appearing in Dark Knight"</span>})</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>rec_list_panda</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="13">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">Movie</th>
+<th data-quarto-table-cell-role="th">No. Actors Appearing in Dark Knight</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>The Dark Knight</td>
+<td>138</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>The Fire Rises: The Creation and Impact of The...</td>
+<td>10</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>The Dark Knight Rises</td>
+<td>9</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>CSI: Crime Scene Investigation</td>
+<td>9</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Doctor Who</td>
+<td>9</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">3383</td>
+<td>Tony Awards</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3384</td>
+<td>Navy Log</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">3385</td>
+<td>Mark Saber</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3386</td>
+<td>What's My Line?</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">3387</td>
+<td>Morning Departure</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+
+<p>3388 rows × 2 columns</p>
+</div>
+</div>
+</div>
+<p>Note that for the first entry, “The Dark Knight” as a count of 138 when we were expecting to only get 136. This is because two actors, Heath Ledger and Tom McComas, are actually listed twice on their cast page, which accounts for the increase of two counts.</p>
+<p>Great! Now we have our ordered list! Ignoring “The Dark Knight” with the highest count (which is a given), we can see that the next highest is “The Fire Rises: The Creation and Impact of the Dark Knight Trilogy,” a documentary about “The Dark Knight” trilogy (which also makes sense), so we shold ignore that one as well. The third highest is “The Dark Knight Rises,” followed by “CSI: Crime Scene Investigation” and then “Doctor Who.” These are our top three recommendations</p>
+</section>
+<section id="creating-data-visualization" class="level1">
+<h1>Creating Data Visualization</h1>
+<p>To end, let’s create a data visualization showing a bar chart of number of shared actors for the movies.</p>
+<p>Because there over 3,000 movies, let’s restrict the amount we want to include by imposing a minimum count. For this example, we will make it 6. Also, because we only want recommendations, we will exclude The Dark Knight in the visualization as well.</p>
+<p>First we want to create our considered movie rec dataframe.</p>
+<div id="f364ee25" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>bar_data <span class="op">=</span> pd.DataFrame(rec_list_sorted)             <span class="co"># Creating dataframe of 2D sorted list</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>bar_data <span class="op">=</span> bar_data[bar_data[<span class="dv">1</span>] <span class="op">&lt;</span> <span class="bu">max</span>(bar_data[<span class="dv">1</span>])]  <span class="co"># Removing The Dark Knight entry</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>bar_data <span class="op">=</span> bar_data[bar_data[<span class="dv">1</span>] <span class="op">&gt;=</span> <span class="dv">6</span>]                <span class="co"># Restricting minimum score to be 6</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>bar_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="15">
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">0</th>
+<th data-quarto-table-cell-role="th">1</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">1</td>
+<td>The Fire Rises: The Creation and Impact of The...</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">2</td>
+<td>The Dark Knight Rises</td>
+<td>9</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">3</td>
+<td>CSI: Crime Scene Investigation</td>
+<td>9</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Doctor Who</td>
+<td>9</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">5</td>
+<td>Gotham Tonight</td>
+<td>8</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">6</td>
+<td>Prison Break</td>
+<td>7</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">7</td>
+<td>Waking the Dead</td>
+<td>7</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">8</td>
+<td>Heath Ledger: A Tribute</td>
+<td>6</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">9</td>
+<td>E! True Hollywood Story</td>
+<td>6</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">10</td>
+<td>Ending the Knight</td>
+<td>6</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">11</td>
+<td>Batman Begins</td>
+<td>6</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">12</td>
+<td>Casualty</td>
+<td>6</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">13</td>
+<td>The View</td>
+<td>6</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">14</td>
+<td>LIVE with Kelly and Mark</td>
+<td>6</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<p>Finally, we can create our bar chart figure. Because we have titles as our independent variable, which can be long, we want to make a horizontal bar chart instead of a vertical one.</p>
+<div id="a9852dee" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure(figsize <span class="op">=</span> (<span class="dv">10</span>, <span class="dv">5</span>))</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># creating the bar plot</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>plt.barh(bar_data[<span class="dv">0</span>], bar_data[<span class="dv">1</span>], color <span class="op">=</span><span class="st">'Blue'</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Movie"</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"No. of Actor/Actress Appearances Who Were Also in The Dark Knight"</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Bar Plot of the Top Recs for The Dark Knight"</span>)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 
