@@ -22,6 +22,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -155,27 +189,85 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p>In this blog post, we will learn how to create simple webapp via Flask, a web framework that provides useful tools and features that make creating web applications in Python a lot easier.</p>
+<p>In this blog post, we will learn how to create simple webapp via Flask, a web framework that provides useful tools and features that make creating web applications in Python a lot easier. For our example, we will creating a message bank which allows a user to either submit a message or view previous message entries.</p>
+<section id="setting-up-flask" class="level1">
+<h1>Setting up Flask</h1>
+<p>The first thing we need to do is setup flask. So, we will go to our virtual environment and then install flask. For Windows, the two line of code will be: <code>conda activate {environment name}</code> and <code>pip install flask</code>. Then to help with our website creation, we want to set our Flask environment to “development” through <code>export FLASK_ENV=development</code> which enables debug mode and gives more specific error messages.</p>
+<p>Now, we can start with the code files. First, in order to tell the Flask where our application is, we will create a python file called <code>app.py</code>. In this file we will need to import the flask python library as well as some of its tools. First, we need <code>Flask</code> class to run the application. We are also using <code>render_template()</code> function in order to generate output from a template file based on the Jinja2 engine that is found in the application’s templates folder. Next, we import <code>request</code> which creates a Request object that allows you to access the data passed into your Flask application. Lastly, we need <code>g</code> which acts as a namespace object to store common data during a request.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> flask <span class="im">import</span> Flask, render_template, request, g</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Next, we want to create a Flask application object and set up the Flask application to know where to look for templates and static files based on the location of the current Python module. We can do that with the code below:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> Flask(<span class="va">__name__</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Lastly, in order to run the the Flask application we want to use the line below:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">'__main__'</span>:</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    app.run(debug<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>By saying <code>if_name_ == '__main__'</code>, we are ensuring that the application only starts/runs when the script is executed directly and not when imported as a module in another script.</p>
+</section>
+<section id="creating-website-functions" class="level1">
+<h1>Creating Website Functions</h1>
+<p>Next up, depending on the goals of your website, we want to create some functions that we will call later when specifying the purpose of each website. For our purposes, because we want to have a website to submit and view messages, we will create three different functions.</p>
+<p>For the first function, we want to create a function that should handle creating the database of messages (thus, we should also <code>import sqlite3</code>). This function should be able to 1) check whether there is a database in the <code>g</code> attribute of the app and connect to the database if there isn’t. Thus, our code should look something like this:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_message_db():</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> g.message_db                                       <span class="co"># Returning message database from attribute g                               </span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">AttributeError</span>: </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        g.message_db <span class="op">=</span> sqlite3.<span class="ex">connect</span>(<span class="st">"messages_db.sqlite"</span>)      <span class="co"># Creating connection to database file</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        cursor <span class="op">=</span> g.message_db.cursor()                            <span class="co"># Creating cursor object to execute SQL</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        cursor.execute(<span class="st">'''CREATE TABLE IF NOT EXISTS messages (</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="st">                          id INTEGER PRIMARY KEY,</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="st">                          handle TEXT, </span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="st">                          message TEXT)'''</span>)                       <span class="co"># Creatng message table if it doesn't exist yet</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>        g.message_db.commit()                                     <span class="co"># Commiting changes to database</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> g.message_db</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Second, we want to create a function for dealin with submitting message. This is where we will use the <code>request</code> object us to pass data through flask. In addition, because we are dealing with databases, we will want to write and SQL Query that will help us execute inserting the data into the messages table. Thus our code should look something like this:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> insert_message(request):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    message <span class="op">=</span> request.form[<span class="st">'message'</span>]                             <span class="co"># Extracting messages from request form</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    handle <span class="op">=</span> request.form[<span class="st">'handle'</span>]                               <span class="co"># Extracting handle from request form</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    db <span class="op">=</span> get_message_db()                                         <span class="co"># Getting message database</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    cursor <span class="op">=</span> db.cursor()                                          <span class="co"># Creating cursor object to execute SQL</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    SQL_query <span class="op">=</span> <span class="st">"INSERT INTO messages (handle, message) VALUES (?, ?)"</span>  <span class="co"># SQL query to insert data     </span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                                                                        <span class="co"># into messages table </span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    cursor.execute(SQL_query, (handle, message))                  <span class="co"># Executing SQL query with handle </span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>                                                                  <span class="co"># and message as its parameters</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    db.commit()                                                   <span class="co"># Commiting changes to database</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    db.close()                                                    <span class="co"># Closing database connection</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Lastly, we need a function for the viewing aspect of our website. The function will have similar aspects of the <code>insert_message</code> function regarding getting the message database, using SQL query, and executing cursor. However, because we also want previous submitted messages, we will use the <code>fetchall()</code> method to retrieve all rows of a query result set (in our case, the selected messages). Again, our code should look something like this:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> random_messages(n):</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    db <span class="op">=</span> get_message_db()                                         <span class="co"># Getting Message database</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    cursor <span class="op">=</span> db.cursor()                                          <span class="co"># Creating cursor object to execute SQL</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    cursor.execute(<span class="st">'''SELECT handle, message FROM messages ORDER BY RANDOM() LIMIT ?'''</span>, (n,))  <span class="co"># Select random messages </span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                                                                                                <span class="co"># from the database</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    messages <span class="op">=</span> cursor.fetchall()                                  <span class="co"># Fetching all selected messages</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    db.close()                                                    <span class="co"># Closing database connection</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> messages   </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="creating-html-templates" class="level1">
+<h1>Creating HTML Templates</h1>
+<p>Because we are using <code>render_template()</code> function, we will also need to create HTML templates in order to specify what each page will do on the website. First, we want to create a <code>base.html</code> which will act as the initial structure/format of our website.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/9eb70be3-1-PIC16B-HW3-PIC1.png" class="img-fluid figure-img"></p>
-<figcaption>PIC16B-HW3-PIC1.png</figcaption>
+<p><img src="index_files/figure-html/668a3f4b-1-PIC16B-HW3-PIC1-2.png" class="img-fluid figure-img"></p>
+<figcaption>PIC16B-HW3-PIC1-2.png</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/4080cc1c-1-PIC16B-HW3-PIC2.png" class="img-fluid figure-img"></p>
-<figcaption>PIC16B-HW3-PIC2.png</figcaption>
+<p><img src="index_files/figure-html/3d6d6567-1-PIC16B-HW3-PIC2-3.png" class="img-fluid figure-img"></p>
+<figcaption>PIC16B-HW3-PIC2-3.png</figcaption>
 </figure>
 </div>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="index_files/figure-html/f82796e1-1-PIC16B-HW3-PIC3.png" class="img-fluid figure-img"></p>
-<figcaption>PIC16B-HW3-PIC3.png</figcaption>
+<p><img src="index_files/figure-html/1ec20505-1-PIC16B-HW3-PIC3-3.png" class="img-fluid figure-img"></p>
+<figcaption>PIC16B-HW3-PIC3-3.png</figcaption>
 </figure>
 </div>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
