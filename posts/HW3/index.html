@@ -200,7 +200,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Lastly, in order to run the the Flask application we want to use the line below:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">'__main__'</span>:</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    app.run(debug<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>By saying <code>if_name_ == '__main__'</code>, we are ensuring that the application only starts/runs when the script is executed directly and not when imported as a module in another script.</p>
+<p>By saying <code>if_name_ == '__main__'</code>, we are ensuring that the application only starts/runs when the script is executed directly and not when imported as a module in another script. This line will be the last in the python file</p>
 </section>
 <section id="creating-website-functions" class="level1">
 <h1>Creating Website Functions</h1>
@@ -246,7 +246,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="creating-html-templates" class="level1">
 <h1>Creating HTML Templates</h1>
-<p>Because we are using <code>render_template()</code> function, we will also need to create HTML templates in order to specify what each page will do on the website. First, we want to create a <code>base.html</code> which will act as the initial structure/format of our website. It should look something like this</p>
+<p>Because we are using <code>render_template()</code> function, we will also need to create HTML templates in order to specify what each page will do on the website.</p>
+<p>First, we want to create a <code>base.html</code> which will act as the initial structure/format of our website, and to do this we want to use <code>&lt;!doctype html&gt;</code> to declare HTML document type. This HTML file will send us to different links, so we will need to use <code>&lt;nav&gt;</code> which declares a navigation section to provide navigation links to other documents. Because we want to have two different ‘buttons’ to send to different links, one for submitting and one for viewing messages, we want to use <code>a href</code> which will denote a hyperlink from one web address to another and also denotes a hyperlink from one web address to another. In addition, because this html is acting as the starting page which will send us to the other pages, we will want to have additional html files that we can reference to in this <code>base.html</code>. Thus we will use the <code>url_for()</code> function to generate the URL to a view based on a name and arguments. It should look something like this:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!doctype</span> html<span class="dt">&gt;</span>   <span class="co">&lt;!-- HTML document type declaration --&gt;</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- Link to a stylesheet (style.css) in the 'static' directory --&gt;</span></span>
@@ -268,6 +269,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">header</span><span class="dt">&gt;</span></span>
 <span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  {% block content %}{% endblock %}</span>
 <span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">section</span><span class="dt">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>There are two things that we want to take note of in this clock of code. The first is the line <code>&lt;link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"&gt;</code> which is used to include external CSS file (in ur case <code>static</code>) into the document. The second thing is the bottom chuck of code <code>&lt;section class="content"&gt;</code>. By writing this line, we are allowing for template inheritance, meaning future extension templates (in our case, it will be the submit and view HTML files) will be able to override and header content here.</p>
+<p>Now that we have the base HTML down, we want to create our extension files, starting with the <code>submit.html</code>.</p>
+<p>First thing is that since this extends the base HTML , we will need to indicate by saying <code>{% extends 'base.html' %}</code>. For this page, because we want user input, <code>&lt;form method="post" action="/submit"&gt;</code>. <code>form method</code> indicates the starm of an HTML form element, ‘POST’ indicates we that the form will use the ‘POST’ method for submission, and <code>action='/submit'</code> indicates sending this data to the route called ‘/submit’.</p>
+<p>In our form method, we want to create the input field as well as its specifying label which we can achieve through <code>label type</code> and <code>label for</code>, respective (since we want fields, we will use “text” as our input type. Make sure that for each id attribute, you put the variable name specified in your <code>insert_message</code> function as this is what the function will rely on.</p>
+<p>Lastly, we want a submit button which will send the form data to the route by using <code>&lt;input type="submit" value="Submit"&gt;</code>. Putting this all together, our code will look something like this:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>{% extends 'base.html' %}    <span class="co">&lt;!-- Extension of base.html template --&gt;</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>{% block title %}            <span class="co">&lt;!-- Override the title block --&gt;</span></span>
@@ -284,6 +290,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">input</span><span class="ot"> type</span><span class="op">=</span><span class="st">"submit"</span><span class="ot"> value</span><span class="op">=</span><span class="st">"Submit"</span><span class="dt">&gt;</span>                 <span class="co">&lt;!-- Submit button --&gt;</span></span>
 <span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">form</span><span class="dt">&gt;</span></span>
 <span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>{% endblock %}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The next file that we want to create now is the <code>view.html</code> for the viewing aspect of our website. Similar to <code>submit.html</code> we will need <code>{% extends 'base.html' %}</code> to indicate an extension. However, since this wont require user input, we will not using <code>form method</code>. Instead, since we are looking to output the messages and handle, we will be using a for loop that will iterate through the rows of the ‘message’ database and returning a list item for each ‘message’, first item being the handle and second item being the message content. Putting these two factors together, our code will look something like this.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>{% extends 'base.html' %}                        <span class="co">&lt;!-- Extend base.html template --&gt;</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>{% block title %}                                <span class="co">&lt;!-- Override the title block --&gt;</span></span>
@@ -298,6 +305,52 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>{% endfor %}</span>
 <span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">ul</span><span class="dt">&gt;</span></span>
 <span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>{% endblock %}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="app-routing" class="level1">
+<h1>App Routing</h1>
+<p>Now we will start working on the routing part of our website.</p>
+<p>The first one we need will be for the homepage. To specify the routing of different pages on a website, we will be using <code>@app.route()</code> each time, and in the () will be the unique tag to identify that page. Because we are starting with the homepage, we will first put <code>'/'</code> inside. Next, since we have a HTML file that specifies the formatting of our homepage, we will create a function to call that file using <code>render_template()</code>. And so, our code will look like this:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="at">@app.route</span>(<span class="st">'/'</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> main():</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> render_template(<span class="st">'base.html'</span>)                           <span class="co"># Rendering base.html template</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Next, we will specify the routing to the submit page. Similar, to homepage, we will need <code>@app route()</code>, but this time we will put <code>'/submit'</code> in the ().</p>
+<p>Additionally, since our <code>submit.html</code> uses <code>form method</code>, we will add ‘methods’ parameters to tell to the application that this route handles both different requests. Thus, we will need an <code>if-else</code> statement in our function to specify different things. First, we want to check if the request is specifically a ‘POST’ request, and if so, the form on the <code>submit.html</code> was submitted, which means we will need to call the <code>insert_message</code> function with request to send the content into the database and then redirect to the same page with a fresh start. Our code will look something like this:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="at">@app.route</span>(<span class="st">'/submit'</span>, methods<span class="op">=</span>[<span class="st">'GET'</span>, <span class="st">'POST'</span>])</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> submit():</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> request.method <span class="op">==</span> <span class="st">'POST'</span>:                                  </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>        insert_message(request)                                   <span class="co"># Inserting message into database</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> render_template(<span class="st">'submit.html'</span>)                     <span class="co"># Rendering submit.html template</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> render_template(<span class="st">'submit.html'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Lastly, we need to route to the viewing page. Again we do <code>@app.route('/view')</code> this time. The only aspects left we haven’t used is the <code>view.html</code> and the <code>random_message</code> function. So in our function, we will call our function with any quantity parameter (for this case, we will use 5) to retrieve random messages from our database and then assign it to a variable. With this variable, we will render the <code>view.html</code> while passing our variable to it, giving us the displayed messages. So, our code will look like this:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="at">@app.route</span>(<span class="st">'/view'</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> view():</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    messages <span class="op">=</span> random_messages(<span class="dv">5</span>)                                 <span class="co"># Retrieving 5 random messages from database</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> render_template(<span class="st">'view.html'</span>, messages<span class="op">=</span>messages)        <span class="co"># Rendering view.html with fetched messages</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>With these three app routings, we have finished creating all the pages of our website!</p>
+</section>
+<section id="customizing-app" class="level1">
+<h1>Customizing App</h1>
+<p>There are many ways to customize your webapp. The way we will teach is by using CSS, a style sheet language that helps with the styling of a document written in a markup language (in our case, HTML). For the purpose of this blog, we will be changing the font and the color. In our <code>base.html</code>, we ran a line saying <code>&lt;link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"&gt;</code>, which means that it is looking for a folder caled <code>static</code> and in there a file named <code>style.css</code>, so we first need to create these two components (within the css file is where we will write our specifications).</p>
+<p>To specify the font, we will use the line <code>font-family:{font_name_1}, {font_name_2}</code> to change from the default font (we added <code>{font_name_1}, {font_name_2}</code> to specify a different option in case our first font doesnt exists.</p>
+<p>To Specify the text color, we say <code>color: #{number}</code> which tells the aplication that all texts will be set this color-associated number.</p>
+<p>There are other ways to make changes to the website which can be seen by our code below:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode css code-with-copy"><code class="sourceCode css"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>body {</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">font-family</span><span class="ch">:</span> <span class="dv">Arial</span><span class="op">,</span> <span class="dv">sans-serif</span><span class="op">;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">background-color</span><span class="ch">:</span> <span class="cn">#f0f0f0</span><span class="op">;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>h1 {</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">color</span><span class="ch">:</span> <span class="cn">#333</span><span class="op">;</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>ul {</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">list-style-type</span><span class="ch">:</span> <span class="dv">none</span><span class="op">;</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>li {</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">background-color</span><span class="ch">:</span> <span class="cn">#fff</span><span class="op">;</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">padding</span><span class="ch">:</span> <span class="dv">10</span><span class="dt">px</span><span class="op">;</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">margin-bottom</span><span class="ch">:</span> <span class="dv">5</span><span class="dt">px</span><span class="op">;</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Once we have all this, we can go to our terminal, change directory to that specific folder and then use <code>flask run</code> to run our application and start our website. If successful, you should get your website to look something like this:</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="index_files/figure-html/668a3f4b-1-PIC16B-HW3-PIC1-2.png" class="img-fluid figure-img"></p>
@@ -316,6 +369,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <figcaption>PIC16B-HW3-PIC3-3.png</figcaption>
 </figure>
 </div>
+<p>Note that with each page, the URL changes with the unique tag we specified in <code>@app.route()</code>. For the codes and files to our website, you can go to https://github.com/Coding-Tom-1405/HW-3 for more details.</p>
+<p>And with that we are done with our website!</p>
 
 
 </section>
